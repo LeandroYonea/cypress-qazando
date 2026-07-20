@@ -1,39 +1,39 @@
 # Nome da pipeline
-name: Run Basic Testes
+name: Run Basic Testes - Scheduler
 
 # Em que momento sera executada
 on:
-    pull_request:
-        branches: [master]
+  schedule:
+    - cron: "0 20 * * 1-5"
 
 jobs:
-    # O que vai ser feito nesta pipeline
-    # Só teremos um job: rodar os testes
-    cypress-run:
-        # Define qual maquina que será executada
-        runs-on: ubuntu-latest
+  # O que vai ser feito nesta pipeline
+  # Só teremos um job: rodar os testes
+  cypress-run:
+    # Define qual maquina que será executada
+    runs-on: ubuntu-latest
 
-        # Passo a passo para rodar os testes
-        steps:
-            # Clone do projeto
-            - name: Checkout/Clone do projeto
-              uses: actions/checkout@v7
+    # Passo a passo para rodar os testes
+    steps:
+      # Clone do projeto
+      - name: Checkout/Clone do projeto
+        uses: actions/checkout@v7
 
-            #Exemplo de execução no terminal
-            - name: instalar dependencias do projeo
-              run: npm install
+      #Exemplo de execução no terminal
+      - name: instalar dependencias do projeo
+        run: npm install
 
-            # Execução e configuração do projeto
-            - name: Run testes
-              uses: cypress-io/github-action@v7
-              with:
-                  record: true
-              env:
-                  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      # Execução e configuração do projeto
+      - name: Run testes
+        uses: cypress-io/github-action@v7
+        with:
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
-            # Upload do relatório do mocha
-            - name: upload relatório
-              uses: actions/upload-artifact@v7
-              with:
-                    name: Relatório
-                    path: cypress/reports/html
+      # Upload do relatório do mocha
+      - name: upload relatório
+        uses: actions/upload-artifact@v7
+        with:
+          name: Relatório
+          path: cypress/reports/html
